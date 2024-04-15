@@ -1,4 +1,16 @@
 #pragma once
+
+
+#define MAX_COLS 6
+#define MAX_ROWS 40
+
+struct seat_information
+{
+    bool booked;          //∏√◊˘Œª «∑Ò±ª‘§∂®
+    enum TicketPrice price;  //∏√◊˘Œªµ»º∂º∞º€∏Ò
+    //Passenger Infor;  //∏√◊˘Œª≥ÀøÕ–≈œ¢
+};
+
 struct Flight//∫Ω∞‡–≈œ¢
 {
     char flightnumber[10];//∫Ω∞‡∫≈
@@ -22,7 +34,7 @@ struct Flight//∫Ω∞‡–≈œ¢
     int  economyseat;//æ≠º√≤’ ˝¡ø
     int  business;//…ÃŒÒ≤’ ˝¡ø
     int availableSeats;// £”‡ø…”√◊˘Œª
-    //seat_information seats[MAX_ROWS][MAX_COLS] = {0}£ª//∏√º‹¥Œ∫Ω∞‡◊˘Œª–≈œ¢  “ª≈≈6Œª π≤40≈≈//‘›∂®Àƒ≈≈Õ∑µ»≤’ ∞À≈≈…ÃŒÒ≤’  £”‡Œ™æ≠º√≤’
+    struct seat_information seats[MAX_ROWS][MAX_COLS] ;//∏√º‹¥Œ∫Ω∞‡◊˘Œª–≈œ¢  “ª≈≈6Œª π≤40≈≈//‘›∂®Àƒ≈≈Õ∑µ»≤’ ∞À≈≈…ÃŒÒ≤’  £”‡Œ™æ≠º√≤’
 
     struct Flight* next;
 };    //∫Ω∞‡–≈œ¢     this is the basic part
@@ -56,6 +68,8 @@ int appendFlightNode(struct Flight** headRef)//ºÚ∂¯—‘÷Æ
         }
         current->next = newFlight;//¿≠µΩÕ∑¡À º”µΩŒ≤∞Õ…œ
     }
+
+
 
     return n;
 }
@@ -196,6 +210,23 @@ void FlightWriteListToNode(struct Flight** head, int number)
 }
 
 
+void Initialization(struct Flight** head);
+void Initialization(struct Flight** head)
+{
+    struct Flight* current = *head;
+    while (current != NULL)
+    {
+        for (int i = 0; i < MAX_COLS; i++)
+        {
+            for (int j = 0; j < MAX_ROWS; j++)
+            {
+                current->seats[i][j].booked = 0;
+            }
+        }
+        current = current->next;
+    }
+}
+
 void input_flight(void);
 void check_flight(void);
 
@@ -204,6 +235,7 @@ void input_flight(void)
     struct Flight** WNEU = NULL;
     int number = appendFlightNode(&WNEU);//¥¥Ω®¡¥±Ì
     FlightWriteListToNode(&WNEU, number);//Ω´∫Ω∞‡ ˝æ›–¥»Î¡¥±Ì
+    Initialization(&WNEU);
     FlightWriteListToFile(&WNEU, "∫Ω∞‡ ˝æ›.txt");//Ω´¡¥±Ì–¥»ÎŒƒº˛
     system("cls");
     //freeFlightList(WNEU);
@@ -231,6 +263,7 @@ struct Flight* search(struct Flight** head, const char* number)// ‰»Î∫Ω∞‡∫≈—∞’“∫
     }
     return NULL;
 }
+void FlightSearch(void);
 
 void FlightSearch(void)
 {
@@ -266,3 +299,4 @@ void FlightSearch(void)
     printf("AvailableSeats : %d (Œª)\n", result->availableSeats);
     printf("\n");
 }
+
