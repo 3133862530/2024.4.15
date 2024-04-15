@@ -49,11 +49,17 @@ void printPassengerList(struct Passenger* head) //输出乘客信息的函数
     struct Passenger* current = head;
     while (current != NULL)
     {
+        Sleep(TIME_DELAY);
         printf("Name: %s\n", current->name);
+        Sleep(TIME_DELAY);
         printf("ID Card: %s\n", current->idcard);
+        Sleep(TIME_DELAY);
         printf("Contact Information: %s\n", current->contact_information);
+        Sleep(TIME_DELAY);
         printf("Password: %s\n", current->password);
+        Sleep(TIME_DELAY);
         printf("Registration_number: %s\n", current->Registration_number);
+        Sleep(TIME_DELAY);
         printf("Fancy: %s\n", current->fancy);
        // printf("Seat: %s %s\n", current->seat[0], current->seat[1]);
         printf("\n");
@@ -133,11 +139,17 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
 
     printf("\n");
     printf("示例：\n");
+    Sleep(TIME_DELAY);
     printf("Name: Wang Yili\n");
+    Sleep(TIME_DELAY);
     printf("ID Card: 33032420041004105X\n");
+    Sleep(TIME_DELAY);
     printf("Contact Information: 13587953759\n");
+    Sleep(TIME_DELAY);
     printf("Password: 123123123\n");
+    Sleep(TIME_DELAY);
     printf("Registration_number: 121241230\n");
+    Sleep(TIME_DELAY);
     printf("Fancy: 睡着了不要叫我吃饭\n");
     //printf("Seat: 13 A\n");
     printf("\n");

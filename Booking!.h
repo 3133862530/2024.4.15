@@ -8,10 +8,25 @@ void Book(struct Flight** head, int row, int line, const char* number)//输入航班
 	{
 		if (strcmp(current->flightnumber, number) == 0)
 		{
-			if (current->seats[row][line].booked == 0)
+			if (current->seats[row-1][line].booked == 0)
 			{
-				current->seats[row][line].booked = 1;
+				current->seats[row-1][line].booked = 1;
 				printf("订票成功！\n");
+				printf("机票价格：%d\n", current->seats[row - 1][line].price);
+				printf("请提前四十分钟值机。祝您旅途愉快！");
+				if (row-1 >= 0 && row-1 < 4)
+				{
+					current->headseat -= 1;
+				}
+				else if (row - 1 >= 4 && row - 1 < 8)
+				{
+					current->business -= 1;
+				}
+				else
+				{
+					current->economyseat -= 1;
+				}
+				current->availableSeats -= 1;
 				//printf("%d", current->seats[row][line].booked);//测试语句
 				printf("%d %c\n", row, line + 65);
 				printf("按任意键返回菜单：\n");
