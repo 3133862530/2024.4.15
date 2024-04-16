@@ -143,10 +143,11 @@ void freeFlightList(struct Flight* head)
         free(temp);
     }
 }
-void FlightWriteListToFile(struct Flight** head, const char* filename)
+void FlightWriteListToFile(struct Flight** head, const char* filename)// ‰»Î“ª∏ˆ¡¥±Ì ∞—¡¥±Ì ˝æ›∂º–¥µΩŒƒº˛÷–
 {
-    // ‰»Î“ª∏ˆ¡¥±Ì ∞—¡¥±Ì ˝æ›∂º–¥µΩŒƒº˛÷–
-    FILE* file = fopen(filename, "wb");
+    
+    FILE* file = fopen(filename, "w");//÷ÿ–¥
+    //FILE* file = fopen(filename, "w");//◊∑º”
     struct Flight* temp = *head;
     while (temp != NULL)//√ª–¥ÕÍæÕ“ª÷±–¥
     {
@@ -157,7 +158,7 @@ void FlightWriteListToFile(struct Flight** head, const char* filename)
 }
 void FlightReadListFromFile(struct Flight** head, const char* filename)
 {// ‰»Î“ª∏ˆÕ∑÷∏’Î »ª∫Û∞—Œƒº˛ ˝æ›∂º∂¡µΩ¡¥±Ì÷–
-    FILE* file = fopen(filename, "rb");
+    FILE* file = fopen(filename, "r");
     if (file == NULL)
     {
         printf("Error opening file.\n");
@@ -230,8 +231,20 @@ void FlightWriteListToNode(struct Flight** head, int number)
         scanf("%s", current->destination);
         char c;
         c=getchar();
-        scanf("%d-%d-%d %d:%d:%d", &current->departureTimeYear, &current->departureTimeMonth, &current->departureTimeDay, &current->departureTimeHour, &current->departureTimeMinute, &current->departureTimeSecond);
-        scanf("%d-%d-%d %d:%d:%d", &current->arrivalTimeYear, &current->arrivalTimeMonth, &current->arrivalTimeDay, &current->arrivalTimeHour, &current->arrivalTimeMinute, &current->arrivalTimeSecond);
+        scanf("%d-%d-%d %d:%d:%d", 
+            &current->departureTimeYear, 
+            &current->departureTimeMonth,
+            &current->departureTimeDay, 
+            &current->departureTimeHour, 
+            &current->departureTimeMinute,
+            &current->departureTimeSecond);
+        scanf("%d-%d-%d %d:%d:%d", 
+            &current->arrivalTimeYear,
+            &current->arrivalTimeMonth,
+            &current->arrivalTimeDay,
+            &current->arrivalTimeHour,
+            &current->arrivalTimeMinute,
+            &current->arrivalTimeSecond);
         scanf("%d", &current->mile);
         scanf("%d", &current->headseat);
         scanf("%d", &current->business);
@@ -303,7 +316,7 @@ void check_flight(void)
 
 struct Flight* search(struct Flight** head, const char* number);
 
-struct Flight* search(struct Flight** head, const char* number)// ‰»Î∫Ω∞‡∫≈—∞’“∫Ω∞‡
+struct Flight* search(struct Flight** head, const char* number)// ‰»Î∫Ω∞‡∫≈—∞’“∫Ω∞‡≤¢∑µªÿ∏√∫Ω∞‡÷∏’Î
 {
     struct Flight* current = *head;
     while (current != NULL)
@@ -316,10 +329,10 @@ struct Flight* search(struct Flight** head, const char* number)// ‰»Î∫Ω∞‡∫≈—∞’“∫
 }
 void FlightSearch(void);
 
-void FlightSearch(void)
+void FlightSearch(void)//≤È—Ø≤¢ ‰≥ˆ∏√∫Ω∞‡–≈œ¢
 {
     system("cls");
-    printf(" ‰»Î≤È—Øµƒ∫Ω∞‡∫≈£∫");
+    printf(" ‰»Î≤È—Øµƒ∫Ω∞‡∫≈£∫\n");
     char number[10];
     scanf("%s", number);
     struct Flight** RNEU = NULL;

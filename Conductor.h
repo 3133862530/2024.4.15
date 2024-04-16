@@ -64,7 +64,8 @@ void ConductorWriteListToFile(struct administrator** head, const char* filename)
 void ConductorWriteListToFile(struct administrator** head, const char* filename)
 {
 	//输入一个链表 把链表数据都写到文件中
-	FILE* file = fopen(filename, "wb");
+	FILE* file = fopen(filename, "w");//重写
+	//FILE* file = fopen(filename, "w");//追加
 	struct administrator* temp = *head;
 	while (temp != NULL)//没写完就一直写
 	{
@@ -91,7 +92,7 @@ void freeConductorList(struct administrator* head)
 void ConductorReadListFromFile(struct administrator** head, const char* filename);
 void ConductorReadListFromFile(struct administrator** head, const char* filename)
 {//输入一个头指针 然后把文件数据都读到链表中
-	FILE* file = fopen(filename, "rb");
+	FILE* file = fopen(filename, "r");
 	if (file == NULL)
 	{
 		printf("Error opening file.\n");
@@ -176,8 +177,9 @@ void conductor(void)
 		printf("                 @@@@@***************************管理员系统界面*********************************@@@@@\n");
 		printf("                 ###                              1 录 入 航 班 信 息                             ###\n");//加个登机口
 		printf("                 ###                              2 查 询 具 体 航 班 信 息                       ###\n");
-		printf("                 @@@                              3 显 示 全 部 航 班 信 息                       @@@\n");
-		printf("                 ###                              4 退 出                                         ###\n");
+		printf("                 @@@                              3 查 看 全 部 航 班 信 息                       @@@\n");
+		printf("                 ###                              4 查 看 全 部 乘 客 信 息                       ###\n");
+		printf("                 ###                              5 退 出                                         ###\n");
 		printf("                 #####!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#####\n");
 		int i;
 		printf("请选择: ");
@@ -187,7 +189,8 @@ void conductor(void)
 		case 1:input_flight(); break;
 		case 2:FlightSearch(); break;
 		case 3:check_flight(); break;
-		case 4:system("cls"); return;
+		case 4:check_passenger(); break;
+		case 5:system("cls"); return;
 		default:break;
 		}
 

@@ -13,9 +13,6 @@
 
 
 
-
-
-
 int main(void)
 {
     int i;
@@ -25,18 +22,19 @@ int main(void)
 	{
 		printf("                 @@@@@***************************欢迎使用航班订票系统***************************@@@@@\n");//分类 管理员类与乘客类//搞定
 		printf("                 ###                              1 管 理 员 登 陆                                ###\n");	
-        printf("                 @@@                              2 录 入 乘 客 信 息                             @@@\n");
-		printf("                 ###                              3 查 看 全 部 乘 客 信 息                       ###\n");
+        printf("                 @@@                              2 进 入 乘 客 系 统                             @@@\n");
+		
 		printf("                 @@@                              4 订 票                                         @@@\n");//加可视化//搞定
 		printf("                 ###                              5 退 出                                         ###\n");
+		
 		printf("                 #####!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#####\n");
 		printf("请选择: ");
 		scanf("%d",&i);
 		switch(i){
 		
 		    case 1:conductor(); break;
-			case 2:input_passenger(); break;
-			case 3:check_passenger(); break;
+			case 2:passenger(); break;
+			
 			case 4:bookingTicket(); break;
 			case 5:return;
 			default:break;
