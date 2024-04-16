@@ -1,13 +1,13 @@
 #pragma once
 
-
-#define MAX_COLS 6
 #define MAX_ROWS 40
+#define MAX_COLS 6
+
 
 struct seat_information
 {
     bool booked;          //该座位是否被预定
-    enum TicketPrice price;  //该座位等级及价格
+    int price;  //该座位等级及价格
     //Passenger Infor;  //该座位乘客信息
 };
 
@@ -17,11 +17,17 @@ struct Flight//航班信息
     char departure[20];//起飞地
     char destination[20];//目的地
 
+    int departureTimeYear;
+    int departureTimeMonth;
+    int departureTimeDay;
+
     int departureTimeHour;
     int departureTimeMinute;
     int departureTimeSecond;
 
-    
+    int arrivalTimeYear;
+    int arrivalTimeMonth;
+    int arrivalTimeDay;
 
     int arrivalTimeHour;
     int arrivalTimeMinute;
@@ -31,8 +37,8 @@ struct Flight//航班信息
 
     int  mile;//距离
     int  headseat;//头等舱数量
-    int  economyseat;//经济舱数量
     int  business;//商务舱数量
+    int  economyseat;//经济舱数量
     int availableSeats;//剩余可用座位
     struct seat_information seats[MAX_ROWS][MAX_COLS] ;//该架次航班座位信息  一排6位 共40排//暂定四排头等舱 八排商务舱 剩余为经济舱
 
@@ -79,20 +85,35 @@ void printFlightList(struct Flight* head) //输出航班信息的函数
     while (current != NULL)
     {
         printf("Flightnumber: %s\n", current->flightnumber);
+        Sleep(TIME_DELAY);
         printf("Departure: %s\n", current->departure);
+        Sleep(TIME_DELAY);
         printf("Destination: %s\n", current->destination);
-        printf("DepartureTime: %d:%d:%d\n",
+        Sleep(TIME_DELAY);
+        printf("DepartureTime: %d-%d-%d %d:%d:%d\n",
+            current->departureTimeYear,
+            current->departureTimeYear,
+            current->departureTimeDay,
             current->departureTimeHour,
             current->departureTimeMinute, 
             current->departureTimeSecond);
-        printf("DepartureTime: %d:%d:%d\n", 
+        Sleep(TIME_DELAY);
+        printf("ArrivalTime: %d-%d-%d %d:%d:%d\n", 
+            current->arrivalTimeYear,
+            current->arrivalTimeMonth,
+            current->arrivalTimeDay,
             current->arrivalTimeHour, 
             current->arrivalTimeMinute, 
             current->arrivalTimeSecond);
+        Sleep(TIME_DELAY);
         printf("Mile: %d (公里)\n", current->mile);
+        Sleep(TIME_DELAY);
         printf("Headseat : %d (位)\n", current->headseat);
+        Sleep(TIME_DELAY);
         printf("Economyseat : %d (位)\n", current->economyseat);
+        Sleep(TIME_DELAY);
         printf("Business : %d (位)\n", current->business);
+        Sleep(TIME_DELAY);
         printf("AvailableSeats : %d (位)\n", current->availableSeats);
         printf("\n");
         current = current->next;
@@ -179,15 +200,25 @@ void FlightWriteListToNode(struct Flight** head, int number)
 
     printf("\n");
     printf("示例：\n");
+    Sleep(TIME_DELAY);
     printf("Flightnumber: AF1740\n");
+    Sleep(TIME_DELAY);
     printf("Departure: 沈阳\n");
+    Sleep(TIME_DELAY);
     printf("Destination: 北京\n");
-    printf("DepartureTime: 17:50:30\n");
-    printf("ArrivalTime: 19:20:50\n");
+    Sleep(TIME_DELAY);
+    printf("DepartureTime: 2023-12-1 17:50:30\n");
+    Sleep(TIME_DELAY);
+    printf("ArrivalTime: 2023-12-1 19:20:50\n");
+    Sleep(TIME_DELAY);
     printf("Mile(公里): 649\n");
+    Sleep(TIME_DELAY);
     printf("Headseat(位): 24\n");
+    Sleep(TIME_DELAY);
     printf("Economyseat(位): 24\n");
+    Sleep(TIME_DELAY);
     printf("Business(位): 192\n");
+    Sleep(TIME_DELAY);
     printf("AvailableSeats(位): 240\n");
     printf("\n");
 
@@ -197,12 +228,14 @@ void FlightWriteListToNode(struct Flight** head, int number)
         scanf("%s", current->flightnumber);
         scanf("%s", current->departure);
         scanf("%s", current->destination);
-        scanf("%d:%d:%d", &current->departureTimeHour, &current->departureTimeMinute, &current->departureTimeSecond);
-        scanf("%d:%d:%d", &current->arrivalTimeHour, &current->arrivalTimeMinute, &current->arrivalTimeSecond);
+        char c;
+        c=getchar();
+        scanf("%d-%d-%d %d:%d:%d", &current->departureTimeYear, &current->departureTimeMonth, &current->departureTimeDay, &current->departureTimeHour, &current->departureTimeMinute, &current->departureTimeSecond);
+        scanf("%d-%d-%d %d:%d:%d", &current->arrivalTimeYear, &current->arrivalTimeMonth, &current->arrivalTimeDay, &current->arrivalTimeHour, &current->arrivalTimeMinute, &current->arrivalTimeSecond);
         scanf("%d", &current->mile);
         scanf("%d", &current->headseat);
-        scanf("%d", &current->economyseat);
         scanf("%d", &current->business);
+        scanf("%d", &current->economyseat);
         scanf("%d", &current->availableSeats);
         current = current->next;
     }
@@ -210,19 +243,37 @@ void FlightWriteListToNode(struct Flight** head, int number)
 }
 
 
-void Initialization(struct Flight** head);
+void Initialization(struct Flight** head);//初始化座位信息
 void Initialization(struct Flight** head)
 {
     struct Flight* current = *head;
     while (current != NULL)
     {
-        for (int i = 0; i < MAX_COLS; i++)
+        for (int i = 0; i < 4; i++)//头等
         {
-            for (int j = 0; j < MAX_ROWS; j++)
+            for (int j = 0; j < MAX_COLS; j++)
             {
                 current->seats[i][j].booked = 0;
+                current->seats[i][j].price = current->mile * 4;
             }
         }
+        for (int i = 4; i < 8; i++)//商务
+        {
+            for (int j = 0; j < MAX_COLS; j++)
+            {
+                current->seats[i][j].booked = 0;
+                current->seats[i][j].price = current->mile * 2;
+            }
+        }
+        for (int i = 8; i < MAX_ROWS; i++)//经济
+        {
+            for (int j = 0; j < MAX_COLS; j++)
+            {
+                current->seats[i][j].booked = 0;
+                current->seats[i][j].price = current->mile * 1;
+            }
+        }
+        
         current = current->next;
     }
 }
@@ -280,23 +331,38 @@ void FlightSearch(void)
         printf("未找到匹配的航班。\n");
         return;
     }
-
-    printf("Flightnumber: %s\n", result->flightnumber);
-    printf("Departure: %s\n", result->departure);
-    printf("Destination: %s\n", result->destination);
-    printf("DepartureTime: %d:%d:%d\n",
+    Sleep(TIME_DELAY);
+    printf("航班号: %s\n", result->flightnumber);
+    Sleep(TIME_DELAY);
+    printf("出发: %s\n", result->departure);
+    Sleep(TIME_DELAY);
+    printf("到达: %s\n", result->destination);
+    Sleep(TIME_DELAY);
+    printf("DepartureTime: %d-%d-%d %d:%d:%d\n",
+        result->departureTimeYear,
+        result->departureTimeYear,
+        result->departureTimeDay,
         result->departureTimeHour,
         result->departureTimeMinute,
         result->departureTimeSecond);
-    printf("DepartureTime: %d:%d:%d\n",
+    Sleep(TIME_DELAY);
+    printf("ArrivalTime: %d-%d-%d %d:%d:%d\n",
+        result->arrivalTimeYear,
+        result->arrivalTimeMonth,
+        result->arrivalTimeDay,
         result->arrivalTimeHour,
         result->arrivalTimeMinute,
         result->arrivalTimeSecond);
-    printf("Mile: %d (公里)\n", result->mile);
-    printf("Headseat : %d (位)\n", result->headseat);
-    printf("Economyseat : %d (位)\n", result->economyseat);
-    printf("Business : %d (位)\n", result->business);
-    printf("AvailableSeats : %d (位)\n", result->availableSeats);
+    Sleep(TIME_DELAY);
+    printf("里程: %d (公里)\n", result->mile);
+    Sleep(TIME_DELAY);
+    printf("头等舱数量 : %d (位)\n", result->headseat);
+    Sleep(TIME_DELAY);
+    printf("商务舱数量 : %d (位)\n", result->business);
+    Sleep(TIME_DELAY);
+    printf("经济舱数量 : %d (位)\n", result->economyseat);
+    Sleep(TIME_DELAY);
+    printf("剩余空座 : %d (位)\n", result->availableSeats);
     printf("\n");
 }
 

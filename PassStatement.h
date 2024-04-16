@@ -49,11 +49,17 @@ void printPassengerList(struct Passenger* head) //输出乘客信息的函数
     struct Passenger* current = head;
     while (current != NULL)
     {
+        Sleep(TIME_DELAY);
         printf("Name: %s\n", current->name);
+        Sleep(TIME_DELAY);
         printf("ID Card: %s\n", current->idcard);
+        Sleep(TIME_DELAY);
         printf("Contact Information: %s\n", current->contact_information);
+        Sleep(TIME_DELAY);
         printf("Password: %s\n", current->password);
+        Sleep(TIME_DELAY);
         printf("Registration_number: %s\n", current->Registration_number);
+        Sleep(TIME_DELAY);
         printf("Fancy: %s\n", current->fancy);
        // printf("Seat: %s %s\n", current->seat[0], current->seat[1]);
         printf("\n");
@@ -133,11 +139,17 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
 
     printf("\n");
     printf("示例：\n");
+    Sleep(TIME_DELAY);
     printf("Name: Wang Yili\n");
+    Sleep(TIME_DELAY);
     printf("ID Card: 33032420041004105X\n");
+    Sleep(TIME_DELAY);
     printf("Contact Information: 13587953759\n");
+    Sleep(TIME_DELAY);
     printf("Password: 123123123\n");
+    Sleep(TIME_DELAY);
     printf("Registration_number: 121241230\n");
+    Sleep(TIME_DELAY);
     printf("Fancy: 睡着了不要叫我吃饭\n");
     //printf("Seat: 13 A\n");
     printf("\n");
@@ -168,7 +180,7 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
 void input_passenger(void);
 void check_passenger(void);
 
-void input_passenger()
+void input_passenger()//乘客注册
 {
     struct Passenger** WNEUer = NULL;
     int number = appendPassengerNode(&WNEUer);//创建链表
@@ -177,7 +189,7 @@ void input_passenger()
     system("cls");
     //freePassengerList(WNEUer);//释放过程还有问题 暂未解决
 }
-void check_passenger()
+void check_passenger()//显示全部struct乘客信息
 {
     system("cls");
     struct Passenger** RNEUer = NULL;
