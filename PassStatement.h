@@ -8,6 +8,7 @@ struct Passenger //乘客个人信息
     char password[20];//密码
     char Registration_number[20];//注册编号 UID
     char fancy[100];//旅客偏好
+    long int Total;//总里程
     //char seat[2][3];//座位 例：13 A
     struct Passenger* next;
 };
@@ -22,9 +23,9 @@ void PassengerWriteListToNode(struct Passenger** head, int number);
 
 int appendPassengerNode(struct Passenger** headRef)//简而言之 
 {//输入链表的头指针 和要加入的结构体即可 即可创建n个链表
-    printf("输入添加乘客数量：");
-    int n;
-    scanf("%d", &n);
+    //printf("输入添加乘客数量：");
+    int n = 1;
+    //scanf("%d", &n);
     for (int i = 0; i < n; i++)
     {
         struct Passenger* newPassenger = (struct Passenger*)malloc(sizeof(struct Passenger));
@@ -61,6 +62,8 @@ void printPassengerList(struct Passenger* head) //输出乘客信息的函数
         printf("Registration_number: %s\n", current->Registration_number);
         Sleep(TIME_DELAY);
         printf("Fancy: %s\n", current->fancy);
+        Sleep(TIME_DELAY);
+        printf("Total mile: %ld(km)\n", current->Total);
        // printf("Seat: %s %s\n", current->seat[0], current->seat[1]);
         printf("\n");
         current = current->next;
@@ -80,13 +83,15 @@ void freePassengerList(struct Passenger* head)
         //free(temp->seat);
         free(temp->Registration_number);
         free(temp->fancy);
+        free(temp->Total);
         free(temp);
     }
 }
 void PassengerWriteListToFile(struct Passenger** head, const char* filename)
 {
     //输入一个链表 把链表数据都写到文件中
-    FILE* file = fopen(filename, "wb");
+    //FILE* file = fopen(filename, "w");//重写
+    FILE* file = fopen(filename, "a");//追加
     struct Passenger* temp = *head;
     while (temp != NULL)//没写完就一直写
     {
@@ -97,7 +102,7 @@ void PassengerWriteListToFile(struct Passenger** head, const char* filename)
 }
 void PassengerReadListFromFile(struct Passenger** head, const char* filename)
 {//输入一个头指针 然后把文件数据都读到链表中
-    FILE* file = fopen(filename, "rb");
+    FILE* file = fopen(filename, "r");
     if (file == NULL)
     {
         printf("Error opening file.\n");
@@ -151,6 +156,8 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
     printf("Registration_number: 121241230\n");
     Sleep(TIME_DELAY);
     printf("Fancy: 睡着了不要叫我吃饭\n");
+    Sleep(TIME_DELAY);
+    printf("Total mile: 1400 km\n");
     //printf("Seat: 13 A\n");
     printf("\n");
 
@@ -168,6 +175,7 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
         scanf("%s", current->Registration_number);
         //fgets(current->Registration_number, 21, stdin);
         scanf("%s", current->fancy);
+        scanf("%ld", &current->Total);
         //fgets(current->fancy, 101, stdin);
         //scanf("%s %s", current->seat[0], current->seat[1]);
         current = current->next;
@@ -197,3 +205,79 @@ void check_passenger()//显示全部struct乘客信息
     printPassengerList(RNEUer);
     //freePassengerList(RNEUer);
 }
+
+struct Passenger* Passsearch(struct Passenger** head, const char* UID);
+
+struct Passenger* Passsearch(struct Passenger** head, const char* UID)//输入UID寻找乘客并返回该乘客指针
+{
+    struct Passenger* current = *head;
+    while (current != NULL)
+    {
+        if (strcmp(current->Registration_number, UID) == 0)
+            return current;
+        current = current->next;
+    }
+    return NULL;
+}
+
+void PassengerSearch(void);
+
+void PassengerSearch(void)//查询并输出乘客班信息
+{
+    system("cls");
+    printf("输入查询的乘客注册编号：\n");
+    char Registration_number[20];
+    scanf("%s", Registration_number);
+    struct Passenger** RNEUer = NULL;
+    PassengerReadListFromFile(&RNEUer, "乘客数据.txt");
+    struct Passenger* result = Passsearch(&RNEUer, Registration_number);
+
+    if (result == NULL)
+    {
+        printf("不存在改乘客或UID错误输入。\n");
+        return;
+    }
+    Sleep(TIME_DELAY);
+    printf("Name: %s\n", result->name);
+    Sleep(TIME_DELAY);
+    printf("ID Card: %s\n", result->idcard);
+    Sleep(TIME_DELAY);
+    printf("Contact Information: %s\n", result->contact_information);
+    Sleep(TIME_DELAY);
+    printf("Password: %s\n", result->password);
+    Sleep(TIME_DELAY);
+    printf("Registration_number: %s\n", result->Registration_number);
+    Sleep(TIME_DELAY);
+    printf("Fancy: %s\n", result->fancy);
+    Sleep(TIME_DELAY);
+    printf("Total mile: %ld(km)\n", result->Total);
+    printf("\n");
+}
+
+
+void passenger(void);
+void passenger(void)
+{
+    system("cls");
+    while (1)
+    {
+        int i;
+
+        printf("                 @@@@@***************************欢迎使用乘客系统*******************************@@@@@\n");
+        printf("                 ###                              1 乘 客 注 册                                   ###\n");
+        printf("                 @@@                              2 查 看 乘 客 信 息                             @@@\n");
+        printf("                 ###                              3 修 改 乘 客 信 息                             ###\n");
+        printf("                 #####!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#####\n");
+
+        printf("请选择: ");
+        scanf("%d", &i);
+        switch (i) {
+        case 1:input_passenger(); break;
+        case 2:PassengerSearch(); break;
+        case 3:PassengerSearch(); break;
+        }
+    }
+
+
+}
+
