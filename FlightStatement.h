@@ -1,13 +1,13 @@
 #pragma once
 
-
-#define MAX_COLS 6
 #define MAX_ROWS 40
+#define MAX_COLS 6
+
 
 struct seat_information
 {
     bool booked;          //¸Ã×ùÎ»ÊÇ·ñ±»Ô¤¶¨
-    enum TicketPrice price;  //¸Ã×ùÎ»µÈ¼¶¼°¼Û¸ñ
+    int price;  //¸Ã×ùÎ»µÈ¼¶¼°¼Û¸ñ
     //Passenger Infor;  //¸Ã×ùÎ»³Ë¿ÍÐÅÏ¢
 };
 
@@ -17,11 +17,17 @@ struct Flight//º½°àÐÅÏ¢
     char departure[20];//Æð·ÉµØ
     char destination[20];//Ä¿µÄµØ
 
+    int departureTimeYear;
+    int departureTimeMonth;
+    int departureTimeDay;
+
     int departureTimeHour;
     int departureTimeMinute;
     int departureTimeSecond;
 
-    
+    int arrivalTimeYear;
+    int arrivalTimeMonth;
+    int arrivalTimeDay;
 
     int arrivalTimeHour;
     int arrivalTimeMinute;
@@ -31,8 +37,8 @@ struct Flight//º½°àÐÅÏ¢
 
     int  mile;//¾àÀë
     int  headseat;//Í·µÈ²ÕÊýÁ¿
-    int  economyseat;//¾­¼Ã²ÕÊýÁ¿
     int  business;//ÉÌÎñ²ÕÊýÁ¿
+    int  economyseat;//¾­¼Ã²ÕÊýÁ¿
     int availableSeats;//Ê£Óà¿ÉÓÃ×ùÎ»
     struct seat_information seats[MAX_ROWS][MAX_COLS] ;//¸Ã¼Ü´Îº½°à×ùÎ»ÐÅÏ¢  Ò»ÅÅ6Î» ¹²40ÅÅ//ÔÝ¶¨ËÄÅÅÍ·µÈ²Õ °ËÅÅÉÌÎñ²Õ Ê£ÓàÎª¾­¼Ã²Õ
 
@@ -76,23 +82,40 @@ int appendFlightNode(struct Flight** headRef)//¼ò¶øÑÔÖ®
 void printFlightList(struct Flight* head) //Êä³öº½°àÐÅÏ¢µÄº¯Êý
 {
     struct Flight* current = head;
+    current = current->next;//Ìø¹ýµÚÒ»¸öÊ¾Àýº½°à
     while (current != NULL)
     {
+        
         printf("Flightnumber: %s\n", current->flightnumber);
+        Sleep(TIME_DELAY);
         printf("Departure: %s\n", current->departure);
+        Sleep(TIME_DELAY);
         printf("Destination: %s\n", current->destination);
-        printf("DepartureTime: %d:%d:%d\n",
+        Sleep(TIME_DELAY);
+        printf("DepartureTime: %d-%d-%d %d:%d:%d\n",
+            current->departureTimeYear,
+            current->departureTimeYear,
+            current->departureTimeDay,
             current->departureTimeHour,
             current->departureTimeMinute, 
             current->departureTimeSecond);
-        printf("DepartureTime: %d:%d:%d\n", 
+        Sleep(TIME_DELAY);
+        printf("ArrivalTime: %d-%d-%d %d:%d:%d\n", 
+            current->arrivalTimeYear,
+            current->arrivalTimeMonth,
+            current->arrivalTimeDay,
             current->arrivalTimeHour, 
             current->arrivalTimeMinute, 
             current->arrivalTimeSecond);
+        Sleep(TIME_DELAY);
         printf("Mile: %d (¹«Àï)\n", current->mile);
+        Sleep(TIME_DELAY);
         printf("Headseat : %d (Î»)\n", current->headseat);
+        Sleep(TIME_DELAY);
         printf("Economyseat : %d (Î»)\n", current->economyseat);
+        Sleep(TIME_DELAY);
         printf("Business : %d (Î»)\n", current->business);
+        Sleep(TIME_DELAY);
         printf("AvailableSeats : %d (Î»)\n", current->availableSeats);
         printf("\n");
         current = current->next;
@@ -122,10 +145,11 @@ void freeFlightList(struct Flight* head)
         free(temp);
     }
 }
-void FlightWriteListToFile(struct Flight** head, const char* filename)
+void FlightWriteListToFile(struct Flight** head, const char* filename)//ÊäÈëÒ»¸öÁ´±í °ÑÁ´±íÊý¾Ý¶¼Ð´µ½ÎÄ¼þÖÐ
 {
-    //ÊäÈëÒ»¸öÁ´±í °ÑÁ´±íÊý¾Ý¶¼Ð´µ½ÎÄ¼þÖÐ
-    FILE* file = fopen(filename, "wb");
+    
+    //FILE* file = fopen(filename, "w");//ÖØÐ´
+    FILE* file = fopen(filename, "w");//×·¼Ó
     struct Flight* temp = *head;
     while (temp != NULL)//Ã»Ð´Íê¾ÍÒ»Ö±Ð´
     {
@@ -136,7 +160,7 @@ void FlightWriteListToFile(struct Flight** head, const char* filename)
 }
 void FlightReadListFromFile(struct Flight** head, const char* filename)
 {//ÊäÈëÒ»¸öÍ·Ö¸Õë È»ºó°ÑÎÄ¼þÊý¾Ý¶¼¶Áµ½Á´±íÖÐ
-    FILE* file = fopen(filename, "rb");
+    FILE* file = fopen(filename, "r");
     if (file == NULL)
     {
         printf("Error opening file.\n");
@@ -179,15 +203,25 @@ void FlightWriteListToNode(struct Flight** head, int number)
 
     printf("\n");
     printf("Ê¾Àý£º\n");
+    Sleep(TIME_DELAY);
     printf("Flightnumber: AF1740\n");
+    Sleep(TIME_DELAY);
     printf("Departure: ÉòÑô\n");
+    Sleep(TIME_DELAY);
     printf("Destination: ±±¾©\n");
-    printf("DepartureTime: 17:50:30\n");
-    printf("ArrivalTime: 19:20:50\n");
+    Sleep(TIME_DELAY);
+    printf("DepartureTime: 2023-12-1 17:50:30\n");
+    Sleep(TIME_DELAY);
+    printf("ArrivalTime: 2023-12-1 19:20:50\n");
+    Sleep(TIME_DELAY);
     printf("Mile(¹«Àï): 649\n");
+    Sleep(TIME_DELAY);
     printf("Headseat(Î»): 24\n");
+    Sleep(TIME_DELAY);
     printf("Economyseat(Î»): 24\n");
+    Sleep(TIME_DELAY);
     printf("Business(Î»): 192\n");
+    Sleep(TIME_DELAY);
     printf("AvailableSeats(Î»): 240\n");
     printf("\n");
 
@@ -197,12 +231,26 @@ void FlightWriteListToNode(struct Flight** head, int number)
         scanf("%s", current->flightnumber);
         scanf("%s", current->departure);
         scanf("%s", current->destination);
-        scanf("%d:%d:%d", &current->departureTimeHour, &current->departureTimeMinute, &current->departureTimeSecond);
-        scanf("%d:%d:%d", &current->arrivalTimeHour, &current->arrivalTimeMinute, &current->arrivalTimeSecond);
+        char c;
+        c=getchar();
+        scanf("%d-%d-%d %d:%d:%d", 
+            &current->departureTimeYear, 
+            &current->departureTimeMonth,
+            &current->departureTimeDay, 
+            &current->departureTimeHour, 
+            &current->departureTimeMinute,
+            &current->departureTimeSecond);
+        scanf("%d-%d-%d %d:%d:%d", 
+            &current->arrivalTimeYear,
+            &current->arrivalTimeMonth,
+            &current->arrivalTimeDay,
+            &current->arrivalTimeHour,
+            &current->arrivalTimeMinute,
+            &current->arrivalTimeSecond);
         scanf("%d", &current->mile);
         scanf("%d", &current->headseat);
-        scanf("%d", &current->economyseat);
         scanf("%d", &current->business);
+        scanf("%d", &current->economyseat);
         scanf("%d", &current->availableSeats);
         current = current->next;
     }
@@ -210,19 +258,37 @@ void FlightWriteListToNode(struct Flight** head, int number)
 }
 
 
-void Initialization(struct Flight** head);
+void Initialization(struct Flight** head);//³õÊ¼»¯×ùÎ»ÐÅÏ¢
 void Initialization(struct Flight** head)
 {
     struct Flight* current = *head;
     while (current != NULL)
     {
-        for (int i = 0; i < MAX_COLS; i++)
+        for (int i = 0; i < 4; i++)//Í·µÈ
         {
-            for (int j = 0; j < MAX_ROWS; j++)
+            for (int j = 0; j < MAX_COLS; j++)
             {
                 current->seats[i][j].booked = 0;
+                current->seats[i][j].price = current->mile * 4;
             }
         }
+        for (int i = 4; i < 8; i++)//ÉÌÎñ
+        {
+            for (int j = 0; j < MAX_COLS; j++)
+            {
+                current->seats[i][j].booked = 0;
+                current->seats[i][j].price = current->mile * 2;
+            }
+        }
+        for (int i = 8; i < MAX_ROWS; i++)//¾­¼Ã
+        {
+            for (int j = 0; j < MAX_COLS; j++)
+            {
+                current->seats[i][j].booked = 0;
+                current->seats[i][j].price = current->mile * 1;
+            }
+        }
+        
         current = current->next;
     }
 }
@@ -252,7 +318,7 @@ void check_flight(void)
 
 struct Flight* search(struct Flight** head, const char* number);
 
-struct Flight* search(struct Flight** head, const char* number)//ÊäÈëº½°àºÅÑ°ÕÒº½°à
+struct Flight* search(struct Flight** head, const char* number)//ÊäÈëº½°àºÅÑ°ÕÒº½°à²¢·µ»Ø¸Ãº½°àÖ¸Õë
 {
     struct Flight* current = *head;
     while (current != NULL)
@@ -263,12 +329,26 @@ struct Flight* search(struct Flight** head, const char* number)//ÊäÈëº½°àºÅÑ°ÕÒº
     }
     return NULL;
 }
+struct Flight* search(struct Flight** head, const char* number);
+
+struct Flight* Delectsearch(struct Flight** head, const char* number)//ÊäÈëº½°àºÅÑ°ÕÒº½°à²¢·µ»ØÇ°Ò»º½°àÖ¸Õë
+{
+    struct Flight* current = *head;
+    while (current != NULL)
+    {
+        if (strcmp(current->next->flightnumber, number) == 0)
+            return current;
+        current = current->next;
+    }
+    return NULL;
+}
+
 void FlightSearch(void);
 
-void FlightSearch(void)
+void FlightSearch(void)//²éÑ¯²¢Êä³ö¸Ãº½°àÐÅÏ¢
 {
     system("cls");
-    printf("ÊäÈë²éÑ¯µÄº½°àºÅ£º");
+    printf("ÊäÈë²éÑ¯µÄº½°àºÅ£º\n");
     char number[10];
     scanf("%s", number);
     struct Flight** RNEU = NULL;
@@ -280,23 +360,85 @@ void FlightSearch(void)
         printf("Î´ÕÒµ½Æ¥ÅäµÄº½°à¡£\n");
         return;
     }
-
-    printf("Flightnumber: %s\n", result->flightnumber);
-    printf("Departure: %s\n", result->departure);
-    printf("Destination: %s\n", result->destination);
-    printf("DepartureTime: %d:%d:%d\n",
+    Sleep(TIME_DELAY);
+    printf("º½°àºÅ: %s\n", result->flightnumber);
+    Sleep(TIME_DELAY);
+    printf("³ö·¢: %s\n", result->departure);
+    Sleep(TIME_DELAY);
+    printf("µ½´ï: %s\n", result->destination);
+    Sleep(TIME_DELAY);
+    printf("DepartureTime: %d-%d-%d %d:%d:%d\n",
+        result->departureTimeYear,
+        result->departureTimeYear,
+        result->departureTimeDay,
         result->departureTimeHour,
         result->departureTimeMinute,
         result->departureTimeSecond);
-    printf("DepartureTime: %d:%d:%d\n",
+    Sleep(TIME_DELAY);
+    printf("ArrivalTime: %d-%d-%d %d:%d:%d\n",
+        result->arrivalTimeYear,
+        result->arrivalTimeMonth,
+        result->arrivalTimeDay,
         result->arrivalTimeHour,
         result->arrivalTimeMinute,
         result->arrivalTimeSecond);
-    printf("Mile: %d (¹«Àï)\n", result->mile);
-    printf("Headseat : %d (Î»)\n", result->headseat);
-    printf("Economyseat : %d (Î»)\n", result->economyseat);
-    printf("Business : %d (Î»)\n", result->business);
-    printf("AvailableSeats : %d (Î»)\n", result->availableSeats);
+    Sleep(TIME_DELAY);
+    printf("Àï³Ì: %d (¹«Àï)\n", result->mile);
+    Sleep(TIME_DELAY);
+    printf("Í·µÈ²ÕÊýÁ¿ : %d (Î»)\n", result->headseat);
+    Sleep(TIME_DELAY);
+    printf("ÉÌÎñ²ÕÊýÁ¿ : %d (Î»)\n", result->business);
+    Sleep(TIME_DELAY);
+    printf("¾­¼Ã²ÕÊýÁ¿ : %d (Î»)\n", result->economyseat);
+    Sleep(TIME_DELAY);
+    printf("Ê£Óà¿Õ×ù : %d (Î»)\n", result->availableSeats);
     printf("\n");
 }
 
+void delectFlight(void);
+void delectFlight(void)
+{
+    system("cls");
+    printf("ÊäÈëÉ¾³ýµÄº½°àºÅ£º\n");
+    char number[10];
+    scanf("%s", number);
+    struct Flight** RNEU = NULL;
+    FlightReadListFromFile(&RNEU, "º½°àÊý¾Ý.txt");
+
+    struct Flight* temp = search(&RNEU, number);
+    struct Flight* result = Delectsearch(&RNEU, number);
+
+    result->next = result->next->next;
+    /*	free(temp->flightnumber);
+        free(temp->departure);
+        free(temp->destination);
+        free(temp->departureTimeYear);
+        free(temp->departureTimeMonth);
+        free(temp->departureTimeDay);
+        free(temp->departureTimeHour);
+        free(temp->departureTimeMinute);
+        free(temp->departureTimeSecond);
+        free(temp->arrivalTimeYear);
+        free(temp->arrivalTimeMonth);
+        free(temp->arrivalTimeDay);
+        free(temp->arrivalTimeHour);
+        free(temp->arrivalTimeMinute);
+        free(temp->arrivalTimeSecond);
+        free(temp->mile);
+        free(temp->headseat);
+        free(temp->business);
+        free(temp->economyseat);
+        free(temp->availableSeats);
+        for (int i = 0; i < MAX_ROWS; i++)
+        {
+            for (int j = 0; j < MAX_COLS; j++)
+            {
+                free(temp->seats[i][j].booked);
+                free(temp->seats[i][j].price);
+            }
+        }*/
+    free(temp);
+
+
+    FlightWriteListToFile(&RNEU, "º½°àÊý¾Ý.txt");//½«Á´±íÐ´ÈëÎÄ¼þ
+}
