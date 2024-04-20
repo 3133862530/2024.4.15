@@ -6,7 +6,7 @@ struct Passenger //乘客个人信息
     char idcard[19];//18位身份证
     char contact_information[12];//联系方式
     char password[20];//密码
-    char Registration_number[20];//注册编号 UID
+    char Registration_number[10];//注册编号 UID
     char fancy[100];//旅客偏好
     long int Total;//总里程
     long int cost;
@@ -155,8 +155,8 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
     printf("Contact Information: 13587953759\n");
     Sleep(TIME_DELAY);
     printf("Password: 123123123\n");
-    Sleep(TIME_DELAY);
-    printf("Registration_number: 121241230\n");
+    //Sleep(TIME_DELAY);
+    //printf("Registration_number: 121241230\n");
     Sleep(TIME_DELAY);
     printf("Fancy: 睡着了不要叫我吃饭\n");
     //Sleep(TIME_DELAY);
@@ -167,6 +167,15 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
 
     for (int i = 0; i < number; i++)
     {
+
+        srand(time(NULL));
+        char random_string[10];
+        for (i = 0; i < 9; ++i) 
+        {
+            random_string[i] = '0' + rand() % 10;  // 生成0到9之间的随机数，并转换为字符
+        }
+        random_string[9] = '\0';
+
         scanf("%s", current->name);
         //fgets(current->name, 21, stdin);
         scanf("%s", current->idcard);
@@ -175,7 +184,9 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
         //fgets(current->contact_information, 13, stdin);
         scanf("%s", current->password);
         //fgets(current->password, 21, stdin);
-        scanf("%s", current->Registration_number);
+        strcpy(current->Registration_number, random_string);
+        
+        //scanf("%s", current->Registration_number);
         //fgets(current->Registration_number, 21, stdin);
         scanf("%s", current->fancy);
         current->Total = 0;
@@ -183,6 +194,9 @@ void PassengerWriteListToNode(struct Passenger** head, int number)
         //scanf("%ld", &current->Total);
         //fgets(current->fancy, 101, stdin);
         //scanf("%s %s", current->seat[0], current->seat[1]);
+
+        printf("您的注册编号为：\n");
+        printf("%s", current->Registration_number);
         current = current->next;
     }
 
@@ -261,6 +275,50 @@ void PassengerSearch(void)//查询并输出乘客信息
     printf("\n");
 }
 
+void ModifyPassenger(void);
+void ModifyPassenger(void)
+{
+    system("cls");
+    printf("输入查询的乘客注册编号：\n");
+    char Registration_number[20];
+    scanf("%s", Registration_number);
+    struct Passenger** RNEUer = NULL;
+    PassengerReadListFromFile(&RNEUer, "乘客数据.txt");
+    struct Passenger* result = Passsearch(&RNEUer, Registration_number);
+
+    if (result == NULL)
+    {
+        printf("不存在改乘客或UID错误输入。\n");
+        return;
+    }
+
+    while (1)
+    {
+        printf("                 @@@@@***************************修改乘客信息***********************************@@@@@\n");//分类 管理员类与乘客类//搞定
+        printf("                 ###                              1 姓 名                                         ###\n");
+        printf("                 @@@                              2 身 份 证 号                                   @@@\n");
+        printf("                 ###                              3 联 系 方 式                                   ###\n");
+        printf("                 @@@                              4 密 码                                         @@@\n");
+        printf("                 ###                              5 旅 客 偏 好                                   ###\n");
+        printf("                 @@@                              6 退 出 修 改                                   @@@\n");
+        printf("                 #####!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#####\n");
+        int i;
+        scanf("%d", &i);
+        switch (i)
+        {
+        case 1:printf("\n示例：\nName: Wang Yili\n"); scanf("%s", result->name);
+        case 2:printf("\n示例：ID Card: 33032420041004105X\n"); scanf("%s", result->idcard);
+        case 3:printf("\n示例：Contact Information: 13587953759\n"); scanf("%s", result->contact_information);
+        case 4:printf("\n示例：Password: 123123123\n"); scanf("%s", result->password);
+        case 5:printf("\n示例：Fancy: 睡着了不要叫我吃饭\n"); scanf("%s", result->fancy);
+        case 6:return;
+        default:break;
+        }
+        printf("修改成功！\n");
+        PassengerWriteListToFile(&RNEUer, "乘客数据.txt");//将链表写入文件
+
+    }
+}
 
 void passenger(void);
 void passenger(void)
@@ -272,7 +330,9 @@ void passenger(void)
 
         printf("                 @@@@@***************************欢迎使用乘客系统*******************************@@@@@\n");
         printf("                 ###                              1 乘 客 注 册                                   ###\n");
-        printf("                 @@@                              2 查 看 乘 客 信 息                             @@@\n");       
+        printf("                 @@@                              2 查 看 乘 客 信 息                             @@@\n");
+        printf("                 ###                              3 修 改 乘 客 信 息                             ###\n");
+        printf("                 @@@                              4 退 出                                         @@@\n");
         printf("                 #####!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#####\n");
 
         printf("请选择: ");
@@ -280,6 +340,8 @@ void passenger(void)
         switch (i) {
         case 1:input_passenger(); break;
         case 2:PassengerSearch(); break;
+        case 3:ModifyPassenger(); break;
+        case 4:system("cls"); return;
         default:break;
         }
     }

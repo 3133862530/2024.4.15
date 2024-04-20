@@ -1,5 +1,5 @@
 #pragma once
-void Book(struct Flight** head, int row, int line, const char* number, const char*UID);
+void Book(struct Flight** head, int row, int line, const char* number, const char* UID);
 
 void Book(struct Flight** head, int row, int line, const char* number, const char* UID)//输入航班号寻找航班
 {
@@ -23,13 +23,20 @@ void Book(struct Flight** head, int row, int line, const char* number, const cha
 		{
 			if (current->seats[row-1][line].booked == 0)
 			{
-				current->seats[row-1][line].booked = 1;
+				current->seats[row-1][line].booked = true;
 				Booker->Total += current->mile;
 				Booker->cost += current->seats[row - 1][line].price;
 				printf("订票成功！\n");
+				//for (int i = 0; i < 18; i++)
+				//{
+				//	current->seats[row - 1][line].BookerID[i] = UID[i];
+				//}
+				//current->seats[row - 1][line].BookerID[18] = '\0';
+				strcpy(current->seats[row - 1][line].BookerID, UID);//有问题//现在没了
+				
 				printf("机票价格：%d\n", current->seats[row - 1][line].price);
 				printf("请提前四十分钟值机。祝您旅途愉快！");
-				PassengerWriteListToFile(&RNEUer, "乘客数据.txt");
+				//PassengerWriteListToFile(&RNEUer, "乘客数据.txt");
 				if (row-1 >= 0 && row-1 < 4)
 				{
 					current->headseat -= 1;
@@ -46,28 +53,16 @@ void Book(struct Flight** head, int row, int line, const char* number, const cha
 				//printf("%d", current->seats[row][line].booked);//测试语句
 				//printf("%d %c\n", row, line + 65);
 				//printf("按任意键返回菜单：\n");
-				int c;
-				c = getchar();
+				PassengerWriteListToFile(&RNEUer, "乘客数据.txt");//将链表写入文件
 				return;
 			}
 			else
 			{
 				printf("订票失败，该座位已被预订。\n");
-				printf("按任意键返回菜单：\n");
-				int c;
-				c = getchar();
+			
 				return;
 			}
 		}
-		else
-		{
-			printf("航班号错误！\n");
-			printf("按任意键返回菜单：\n");
-			int c;
-			c = getchar();
-			return;
-		}
-
 		current = current->next;
 	}
 	printf("订票失败\n");
@@ -87,7 +82,7 @@ int ShowSeats(struct Flight** head, const char* number)//显示欲订票的航班座位
 		if (strcmp(current->flightnumber, number) == 0)
 		{
 			printf("         A   B   C   D   E   F\n");
-			for (int i = 0; i < MAX_ROWS; i++)
+			for (int i = 0; i < 7; i++)
 			{
 				printf("%d \t", i + 1);
 				for (int j = 0; j < MAX_COLS; j++)
@@ -107,15 +102,11 @@ int ShowSeats(struct Flight** head, const char* number)//显示欲订票的航班座位
 			}
 			return p;
 		}
-		else
-		{
-			printf("航班号错误！\n");
-			p = 0;
-			return p;
-		}
 		current = current->next;
 	}
-
+	printf("航班号错误！\n");
+	p = 0;
+	return p;
 }
 
 

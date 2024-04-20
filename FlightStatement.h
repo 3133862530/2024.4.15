@@ -8,6 +8,7 @@ struct seat_information
 {
     bool booked;          //该座位是否被预定
     int price;  //该座位等级及价格
+    char BookerID[19];//座位主人的ID
     //Passenger Infor;  //该座位乘客信息
 };
 
